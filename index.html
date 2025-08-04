@@ -1,0 +1,237 @@
+
+<!-- word_dictation_tool/frontend/index.html -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>单词听写神器</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+  <link href="https://fonts.loli.net/css?family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Noto Sans SC', sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      min-height: 100vh;
+    }
+    .particles {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+    .card {
+      backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.8);
+      box-shadow: 0 8px 32px rgba(31, 38, 135, 0.1);
+      border-radius: 1rem;
+      transition: all 0.3s ease;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 40px rgba(31, 38, 135, 0.15);
+    }
+    .btn-primary {
+      background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      transition: all 0.3s ease;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+    .word-card {
+      background: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
+    }
+    .answer-list {
+      max-height: 300px;
+      overflow-y: auto;
+      background: rgba(255,255,255,0.9);
+      border-radius: 0.5rem;
+      padding: 1rem;
+      margin-top: 1rem;
+    }
+    .answer-item {
+      padding: 0.5rem;
+      border-bottom: 1px solid #eee;
+    }
+    .answer-item:last-child {
+      border-bottom: none;
+    }
+    .loading-spinner {
+      display: inline-block;
+      width: 1rem;
+      height: 1rem;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 1s ease-in-out infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .file-input {
+      display: none;
+    }
+    .file-label {
+      display: inline-block;
+      padding: 0.75rem 1.5rem;
+      background: linear-gradient(45deg, #4facfe 0%, #00f2fe 100%);
+      color: white;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .file-label:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(79, 172, 254, 0.3);
+    }
+    .file-name {
+      margin-left: 0.5rem;
+      font-size: 0.875rem;
+      color: #4a5568;
+    }
+  </style>
+</head>
+<body class="py-8 px-4">
+  <div id="particles-js" class="particles"></div>
+  
+  <div class="max-w-4xl mx-auto">
+    <h1 class="text-4xl font-bold text-center mb-8 text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-blue-500">
+      🎧 单词听写神器
+    </h1>
+    
+    <div class="card p-6 mb-8">
+      <h2 class="text-2xl font-semibold mb-4">📂 加载单词库</h2>
+      <div class="flex flex-col sm:flex-row gap-4">
+        <select id="wordSource" class="flex-1 p-3 border border-gray-300 rounded-lg">
+          <option value="local">本地文件</option>
+          <option value="github">从GitHub加载</option>
+        </select>
+        <button id="loadBtn" class="btn-primary px-6 py-3 rounded-lg font-medium flex items-center justify-center">
+          <span id="loadText">加载单词库</span>
+          <span id="loadSpinner" class="loading-spinner ml-2 hidden"></span>
+        </button>
+      </div>
+      
+      <div id="localFileContainer" class="mt-4">
+        <label for="fileInput" class="file-label">
+          <span>选择单词文件</span>
+          <span id="fileName" class="file-name">未选择文件</span>
+        </label>
+        <input type="file" id="fileInput" class="file-input" accept=".txt">
+        <p class="text-sm text-gray-500 mt-2">支持TXT格式，每行格式: 英文单词 中文释义</p>
+      </div>
+      
+      <div id="githubUrlContainer" class="mt-4 hidden">
+        <input type="text" id="githubUrl" placeholder="输入GitHub Raw URL" class="w-full p-3 border border-gray-300 rounded-lg">
+        <p class="text-sm text-gray-500 mt-2">示例: https://raw.githubusercontent.com/用户名/仓库名/main/words.txt</p>
+        <p class="text-sm text-blue-500 mt-2">提示: 请确保文件是公开可访问的，并且使用Raw URL</p>
+      </div>
+    </div>
+    
+    <div class="card p-6 mb-8">
+      <h2 class="text-2xl font-semibold mb-4">⚙️ 听写设置</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label for="repeatCount" class="block text-gray-700 mb-2">朗读次数</label>
+          <input type="number" id="repeatCount" min="1" max="5" value="1" class="w-full p-3 border border-gray-300 rounded-lg">
+        </div>
+        
+        <div>
+          <label for="interval" class="block text-gray-700 mb-2">间隔时间(秒)</label>
+          <input type="number" id="interval" min="1" max="60" value="3" class="w-full p-3 border border-gray-300 rounded-lg">
+        </div>
+        
+        <div>
+          <label for="sound" class="block text-gray-700 mb-2">提示音</label>
+          <select id="sound" class="w-full p-3 border border-gray-300 rounded-lg">
+            <option value="beep">默认提示音</option>
+            <option value="bell">铃声</option>
+            <option value="chime">钟声</option>
+          </select>
+        </div>
+        
+        <div>
+          <label for="language" class="block text-gray-700 mb-2">朗读语言</label>
+          <select id="language" class="w-full p-3 border border-gray-300 rounded-lg">
+            <option value="en">英文</option>
+            <option value="zh">中文</option>
+          </select>
+        </div>
+        
+        <div>
+          <label class="block text-gray-700 mb-2">模式选择</label>
+          <select id="mode" class="w-full p-3 border border-gray-300 rounded-lg">
+            <option value="normal">顺序听写</option>
+            <option value="random">随机测试</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card p-6 mb-8">
+      <h2 class="text-2xl font-semibold mb-4">🎤 听写控制</h2>
+      <div class="flex flex-wrap gap-4 justify-center">
+        <button id="startBtn" class="btn-primary px-6 py-3 rounded-lg font-medium">
+          ▶️ 开始听写
+        </button>
+        <button id="pauseBtn" disabled class="btn-primary px-6 py-3 rounded-lg font-medium opacity-50">
+          ⏸️ 暂停
+        </button>
+        <button id="stopBtn" disabled class="btn-primary px-6 py-3 rounded-lg font-medium opacity-50">
+          ⏹️ 停止
+        </button>
+        <button id="answerBtn" class="btn-primary px-6 py-3 rounded-lg font-medium">
+          📝 显示答案
+        </button>
+      </div>
+      
+      <div class="mt-6 flex justify-between items-center">
+        <div class="text-xl">
+          <span id="currentIndex">0</span>/<span id="totalWords">0</span>
+        </div>
+        <div class="text-xl">
+          ⏱️ <span id="timer">00:00</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card p-6 mb-8">
+      <h2 class="text-2xl font-semibold mb-4">📝 当前单词</h2>
+      <div id="currentWord" class="word-card text-center p-8 rounded-lg text-3xl font-bold mb-4">
+        等待开始...
+      </div>
+    </div>
+    
+    <div id="answerSection" class="hidden">
+      <div class="card p-6 mb-8">
+        <h2 class="text-2xl font-semibold mb-4">📋 听写答案</h2>
+        <div id="answerList" class="answer-list">
+          <!-- 答案列表将通过JS动态生成 -->
+        </div>
+        <div id="summary" class="mt-4 text-center text-xl font-semibold">
+          <!-- 统计信息将通过JS动态生成 -->
+        </div>
+      </div>
+    </div>
+    
+    <div class="card p-6">
+      <h2 class="text-2xl font-semibold mb-4">📊 听写历史</h2>
+      <div id="historyList" class="space-y-2">
+        <div class="text-center text-gray-500">暂无历史记录</div>
+      </div>
+    </div>
+
+    <div id="compatibilityNotice" class="mt-4"></div>
+    <div id="errorNotice" class="mt-4"></div>
+  </div>
+  
+  <audio id="soundEffect" src="https://8bituniverse.com/sounds/beep.mp3"></audio>
+  
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
