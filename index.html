@@ -1,0 +1,381 @@
+
+<!-- cool_website_sharing_platform/frontend/index.html -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>灵犀-分享平台</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.loli.net/css?family=Noto+Sans+SC:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background: linear-gradient(135deg, #2a0a4a 0%, #4a148c 50%, #7b1fa2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: white;
+        }
+        
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: -1;
+            mix-blend-mode: screen;
+        }
+        
+        .website-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .website-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(90deg, #9c27b0 0%, #e91e63 100%);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(233, 30, 99, 0.3);
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+        
+        @keyframes rotate {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.2);
+            }
+        }
+        
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .cursor-particle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: -1;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+<body>
+    <div id="particles-js"></div>
+    
+    <div class="container mx-auto px-4 py-12">
+        <header class="text-center mb-16">
+            <h1 class="text-5xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600 floating">
+                ✨ 灵犀-芯启未来
+            </h1>
+            <p class="text-xl text-gray-300 max-w-2xl mx-auto">
+                发现互联网上最令人心动的创意与资源
+            </p>
+        </header>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="websites-container">
+            <!-- 网站卡片将通过JavaScript动态生成 -->
+        </div>
+        
+        <footer class="mt-16 text-center text-gray-400">
+            <p><a href="https://wjm2008.pages.dev" target="_blank">© 2025 灵犀服务器-个人主页| 让分享带来更多喜悦</a></p>
+        </footer>
+    </div>
+
+    <script>
+        // 网站数据数组 - 管理员可以在这里修改分享的网站
+        const websites = [            
+            
+            {
+                name: "kimi ai",
+                url: "https://kimi.moonshot.cn",
+                description: "更强大的AI助手",
+                category: "AI工具"
+            },
+            {
+                name: "DeepSeek",
+                url: "https://chat.deepseek.com/",
+                description: "会深度思考的AI助手",
+                category: "AI工具"
+            },
+            {
+                name: "豆包AI",
+                url: "https://www.doubao.com/",
+                description: "字节跳动旗下AI智能助手",
+                category: "AI工具"
+            },
+            {
+                name: "文心一言",
+                url: "https://yiyan.baidu.com",
+                description: "百度旗下AI智能助手",
+                category: "AI工具"
+            },
+            {
+                name: "紫东太初",
+                url: "https://taichu-web.ia.ac.cn",
+                description: "新一代多模态大模型",
+                category: "AI工具"
+            },
+            {
+                name: "ChatExcel AI",
+                url: "https://chatexcel.com",
+                description: "AI表格处理与数据分析",
+                category: "AI工具"
+            },
+            {
+                name: "Raphael AI",
+                url: "https://raphaelai.org/",
+                description: "AI图像生成器",
+                category: "AI工具"
+            },
+            {
+                name: "凹凸工坊",
+                url: "https://www.autohanding.com/",
+                description: "文字ai转换手写体",
+                category: "AI工具"
+            },
+            {
+                name: "GitHub",
+                url: "https://github.com",
+                description: "全球最大的代码托管平台",
+                category: "开发工具"
+            },
+            {
+                name: "创客社区",
+                url: "https://mc.dfrobot.com.cn",
+                description: "创客社区-分享创造的喜悦",
+                category: "开发工具"
+            },
+            {
+                name: "HaiSnap",
+                url: "https://www.haisnap.com",
+                description: "智能应用开发网站",
+                category: "开发工具"
+            },
+            {
+                name: "荔枝网",
+                url: "https://www.gdtv.cn",
+                description: "广东网络广播电视台",
+                category: "影视资源"
+            },
+            {
+                name: "央视网",
+                url: "https://www.cctv.com",
+                description: "中央广播电视台官网",
+                category: "影视资源"
+            },
+            {
+                name: "中国纪录片网",
+                url: "http://www.docuchina.cn",
+                description: "国家级纪录片平台",
+                category: "影视资源"
+            },
+            {
+                name: "MemoryStory",
+                url: "https://cnxiaobai.com",
+                description: "实用软件下载",
+                category: "软件资源"
+            },
+            {
+                name: "书签地球",
+                url: "https://www.bookmarkearth.cn",
+                description: "中国首家书签共享平台",
+                category: "实用资源"
+            },
+            {
+                name: "资源避难所",
+                url: "https://www.flysheep6.com",
+                description: "一个免费的二次元风格下载站",
+                category: "实用资源"
+            },
+            {
+                name: "菜鸟教程",
+                url: "https://www.runoob.com",
+                description: "编程学习网站",
+                category: "学习资源"
+            },
+            {
+                name: "国家图书馆",
+                url: "https://www.nlc.cn",
+                description: "中国国家数字图书馆",
+                category: "学习资源"
+            },
+            {
+                name: "国家高等教育智慧教育平台",
+                url: "https://www.chinaooc.com.cn",
+                description: "国家高等教育智慧教育平台",
+                category: "学习资源"
+            },
+            {
+                name: "中国科普博览",
+                url: "https://www.kepu.net.cn",
+                description: "中国科学院出品的科普平台",
+                category: "学习资源"
+            },
+            {
+                name: "华文慕课",
+                url: "https://www.chinesemooc.org",
+                description: "北京大学创办的、以中文课程为主的慕课 MOOC 平台",
+                category: "学习资源"
+            },
+            {
+                name: "中药大全",
+                url: "https://www.xjlz365.com",
+                description: "中草药查询 中药大全",
+                category: "实用工具"
+            },
+            {
+                name: "中央气象台台风网",
+                url: "https://typhoon.nmc.cn",
+                description: "中央气象台台风网",
+                category: "实用工具"
+            },
+            {
+                name: "标准地图服务",
+                url: "http://bzdt.ch.mnr.gov.cn",
+                description: "全球地图下载网",
+                category: "实用工具"
+            },
+            {
+                name: "单词听写神器",
+                url: "http:www-wjmlhh.haisnap.com",
+                description: "单词听写工具",
+                category: "实用工具"
+            },
+            {
+                name: "BlackACE",
+                url: "https://blackace.app",
+                description: "网站秒变APP",
+                category: "实用工具"
+            }
+        ];
+
+        // 渲染网站卡片
+        function renderWebsites() {
+            const container = document.getElementById('websites-container');
+            
+            websites.forEach(site => {
+                const card = document.createElement('div');
+                card.className = 'website-card rounded-xl p-6 hover:bg-opacity-20';
+                
+                card.innerHTML = `
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white text-xl mr-4">
+                            ${site.name.charAt(0)}
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold">${site.name}</h3>
+                            <span class="text-sm text-gray-400">${site.category}</span>
+                        </div>
+                    </div>
+                    <p class="text-gray-300 mb-6">${site.description}</p>
+                    <a href="${site.url}" target="_blank" class="btn-primary text-white font-medium py-2 px-6 rounded-full inline-block">
+                        访问网站
+                    </a>
+                `;
+                
+                container.appendChild(card);
+            });
+        }
+
+        // 创建粒子效果
+        function createParticles() {
+            const colors = ['#9c27b0', '#e91e63', '#673ab7', '#ff5722', '#ff9800'];
+            
+            // 背景粒子
+            for (let i = 0; i < 100; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                const size = Math.random() * 15 + 5;
+                const posX = Math.random() * window.innerWidth;
+                const posY = Math.random() * window.innerHeight;
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                const duration = Math.random() * 5 + 5; // 修改为5-10秒
+                const delay = Math.random() * 3; // 缩短延迟时间
+                const animationType = Math.random() > 0.5 ? 'float' : 'rotate';
+                
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${posX}px`;
+                particle.style.top = `${posY}px`;
+                particle.style.backgroundColor = color;
+                particle.style.opacity = Math.random() * 0.6 + 0.2;
+                particle.style.animation = `${animationType} ${duration}s ease-in-out ${delay}s infinite`;
+                
+                if (animationType === 'rotate') {
+                    particle.style.borderRadius = '0%';
+                    particle.style.transformOrigin = 'center center';
+                }
+                
+                document.body.appendChild(particle);
+            }
+            
+            // 鼠标跟随粒子
+            document.addEventListener('mousemove', (e) => {
+                const particle = document.createElement('div');
+                particle.className = 'cursor-particle';
+                
+                const size = Math.random() * 10 + 5;
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${e.clientX}px`;
+                particle.style.top = `${e.clientY}px`;
+                particle.style.backgroundColor = color;
+                particle.style.opacity = '0.7';
+                particle.style.animation = `pulse ${Math.random() * 1 + 0.5}s ease-in-out infinite`; // 加快脉冲速度
+                
+                document.body.appendChild(particle);
+                
+                // 粒子消失动画
+                setTimeout(() => {
+                    particle.style.transition = 'all 0.3s ease'; // 加快消失速度
+                    particle.style.opacity = '0';
+                    particle.style.transform = 'translate(-50%, -50%) scale(2)';
+                    setTimeout(() => {
+                        particle.remove();
+                    }, 300);
+                }, 500); // 缩短存在时间
+            });
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            renderWebsites();
+            createParticles();
+        });
+    </script>
+</body>
+</html>
