@@ -1,0 +1,139 @@
+
+/* lingxi_website_sharing/frontend/css/style.css */
+body {
+    font-family: 'Noto Sans SC', sans-serif;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    color: #e2e8f0;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* 粒子背景样式 */
+.particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+/* 卡片样式 */
+.card {
+    background: rgba(26, 32, 44, 0.7);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.75rem;
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* 标签样式 */
+.tag {
+    display: inline-block;
+    background: rgba(56, 178, 172, 0.2);
+    color: #38b2ac;
+    border-radius: 9999px;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.875rem;
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.tag:hover {
+    background: rgba(56, 178, 172, 0.3);
+    transform: translateY(-1px);
+}
+
+.tag.active {
+    background: linear-gradient(45deg, #38b2ac, #4299e1);
+    color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* 标签筛选器容器 */
+.tag-filters {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    margin: 1.5rem 0;
+}
+
+/* 加载动画 */
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.animate-spin {
+    animation: spin 1s linear infinite;
+}
+
+/* 网站缩略图样式 */
+.website-thumbnail {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 0.5rem 0.5rem 0 0;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* 过渡效果 */
+.transition-all {
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+}
+
+/* 无结果提示 */
+.no-results {
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+}
+
+/* 增强粒子效果 */
+@keyframes particle-move {
+    0% {
+        transform: translate(0, 0);
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.8;
+    }
+    100% {
+        transform: translate(var(--tx), var(--ty));
+        opacity: 1;
+    }
+}
+
+.particle {
+    position: absolute;
+    border-radius: 50%;
+    background: linear-gradient(45deg, #38b2ac, #4299e1);
+    box-shadow: 0 0 10px rgba(66, 153, 225, 0.7);
+    animation: particle-move 15s infinite alternate ease-in-out;
+    filter: blur(1px);
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .website-thumbnail {
+        height: 120px;
+    }
+    
+    .tag-filters {
+        justify-content: flex-start;
+        padding: 0 1rem;
+    }
+}

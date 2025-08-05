@@ -1,0 +1,98 @@
+
+<!-- lingxi_website_sharing/frontend/index.html -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>灵犀-分享的喜悦</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.loli.net/css?family=Noto+Sans+SC:400,500,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e2e8f0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        .card {
+            background: rgba(26, 32, 44, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        .tag {
+            background: rgba(56, 178, 172, 0.2);
+            color: #38b2ac;
+        }
+        .tag-filter {
+            transition: all 0.2s ease;
+        }
+        .tag-filter:hover {
+            transform: translateY(-2px);
+        }
+        .tag-filter.active {
+            background: linear-gradient(45deg, #38b2ac, #4299e1);
+            color: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="transition-colors duration-300">
+    <!-- 粒子背景 -->
+    <canvas id="particles" class="particles"></canvas>
+
+    <div class="container mx-auto px-4 py-8">
+        <!-- 头部 -->
+        <header class="flex flex-col items-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500 mb-4">
+                灵犀-分享的喜悦
+            </h1>
+            <p class="text-lg text-gray-400 mb-6">发现优质网站资源，提升工作效率</p>
+        </header>
+
+        <!-- 分类筛选 -->
+        <div id="tagFilters" class="flex flex-wrap justify-center gap-3 mb-8">
+            <!-- 动态标签将通过JS加载 -->
+        </div>
+
+        <!-- 网站列表 -->
+        <main>
+            <div id="loading" class="text-center py-12">
+                <div class="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-cyan-500 mb-4"></div>
+                <p>正在加载网站数据...</p>
+            </div>
+            
+            <div id="websiteGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- 动态网站卡片将通过JS加载 -->
+            </div>
+            
+            <div id="noResults" class="hidden text-center py-12">
+                <i class="fas fa-search text-4xl text-gray-500 mb-4"></i>
+                <h3 class="text-xl font-medium text-gray-400">没有找到匹配的网站</h3>
+            </div>
+        </main>
+
+        <!-- 页脚 -->
+        <footer class="mt-16 text-center text-gray-500 pb-8">
+            <p>数据来源于本地文件，实时更新 | © 2025 灵犀网站分享</p>
+        </footer>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
