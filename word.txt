@@ -1,5 +1,0 @@
-apple 苹果
-happy 开心
-online 在线
-world 世界
-hello 你好
