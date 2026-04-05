@@ -1,4 +1,3 @@
-
 <!-- cool_website_sharing_platform/frontend/index.html -->
 <!DOCTYPE html>
 <html lang="zh-CN">
@@ -6,97 +5,394 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>灵犀-分享平台</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='cyberGradient' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%2300F0FF'/%3E%3Cstop offset='100%25' stop-color='%239D4EDD'/%3E%3C/linearGradient%3E%3Cfilter id='glow' x='-20%25' y='-20%25' width='140%25' height='140%25'%3E%3CfeGaussianBlur stdDeviation='2' result='blur'/%3E%3CfeComposite in='SourceGraphic' in2='blur' operator='over'/%3E%3C/filter%3E%3C/defs%3E%3Cg filter='url(%23glow)'%3E%3C!-- 背景圆 --%3E%3Ccircle cx='50' cy='50' r='48' fill='%23050508' stroke='url(%23cyberGradient)' stroke-width='4'/%3E%3C!-- 明显的DJ字母 --%3E%3Ctext x='50' y='65' font-family='Orbitron, sans-serif' font-size='48' font-weight='900' text-anchor='middle' fill='url(%23cyberGradient)'%3EDJ%3C/text%3E%3C!-- 声波效果 --%3E%3Cpath d='M15 50 Q25 25 40 50 Q50 75 60 50 Q75 25 85 50' stroke='url(%23cyberGradient)' stroke-width='2' fill='none'/%3E%3C!-- 点缀效果 --%3E%3Ccircle cx='20' cy='20' r='4' fill='url(%23cyberGradient)'/%3E%3Ccircle cx='80' cy='20' r='4' fill='url(%23cyberGradient)'/%3E%3Ccircle cx='20' cy='80' r='4' fill='url(%23cyberGradient)'/%3E%3Ccircle cx='80' cy='80' r='4' fill='url(%23cyberGradient)'/%3E%3C/g%3E%3C/svg%3E" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
-    <link href="https://fonts.loli.net/css?family=Noto+Sans+SC:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Noto+Sans+SC:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Noto Sans SC', sans-serif;
-            background: linear-gradient(135deg, #2a0a4a 0%, #4a148c 50%, #7b1fa2 100%);
+            font-family: 'Orbitron', 'Noto Sans SC', sans-serif;
+            background: #050508;
             min-height: 100vh;
             overflow-x: hidden;
-            color: white;
+            color: #ffffff;
+            position: relative;
         }
         
-        .particle {
+        /* 动态科幻背景 */
+        .cyber-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        /* 网格背景 */
+        .cyber-grid {
             position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 240, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 240, 255, 0.1) 1px, transparent 1px);
+            background-size: 30px 30px;
+            animation: gridMove 15s linear infinite;
+        }
+        
+        /* 中心发光效果 */
+        .cyber-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(157, 78, 221, 0.2) 0%, rgba(0, 240, 255, 0.1) 50%, transparent 70%);
+            transform: translate(-50%, -50%);
+            animation: glowPulse 3s ease-in-out infinite;
+        }
+        
+        /* 流动线条 */
+        .cyber-line {
+            position: absolute;
+            background: linear-gradient(90deg, transparent, #00f0ff, transparent);
+            height: 1px;
+            width: 100%;
+            animation: lineMove 4s ease-in-out infinite;
+        }
+        
+        /* 粒子效果 */
+        .particle {
+            position: fixed;
             border-radius: 50%;
             pointer-events: none;
             z-index: -1;
             mix-blend-mode: screen;
         }
         
+        /* 动画定义 */
+        @keyframes gridMove {
+            0% {
+                background-position: 0 0;
+            }
+            100% {
+                background-position: 30px 30px;
+            }
+        }
+        
+        @keyframes glowPulse {
+            0%, 100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.3;
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.1);
+                opacity: 0.6;
+            }
+        }
+        
+        @keyframes lineMove {
+            0% {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes cyberFloat {
+            0% {
+                transform: scale(0) translate(0, 0);
+                opacity: 0;
+            }
+            20% {
+                transform: scale(1) translate(-3px, -3px);
+                opacity: 0.7;
+            }
+            40% {
+                transform: scale(1.1) translate(2px, 2px);
+                opacity: 0.6;
+            }
+            60% {
+                transform: scale(0.8) translate(1px, 1px);
+                opacity: 0.4;
+            }
+            100% {
+                transform: scale(0) translate(5px, 5px);
+                opacity: 0;
+            }
+        }
+        
+        /* 网站卡片 */
         .website-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.3s ease;
+            background: rgba(10, 10, 20, 0.8);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            border-radius: 12px;
+            transition: all 0.4s ease;
+            transform-style: preserve-3d;
+            transform: perspective(1000px) rotateX(0deg) rotateY(0deg);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
         }
         
+        /* 卡片悬停效果 */
         .website-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-            background: rgba(255, 255, 255, 0.15);
+            transform: perspective(1000px) rotateX(5deg) rotateY(5deg) translateY(-15px);
+            box-shadow: 0 25px 50px rgba(0, 240, 255, 0.3);
+            border-color: #00f0ff;
         }
         
+        /* 卡片发光效果 */
+        .website-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.1), transparent);
+            transition: left 0.6s ease;
+            z-index: -1;
+        }
+        
+        .website-card:hover::before {
+            left: 100%;
+        }
+        
+        /* 卡片内部发光 */
+        .website-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, rgba(0, 240, 255, 0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: -1;
+        }
+        
+        .website-card:hover::after {
+            opacity: 1;
+        }
+        
+        /* 按钮样式 */
+        .btn-primary, .copy-link-btn {
+            position: relative;
+            z-index: 10;
+            cursor: pointer;
+        }
+        
+        /* 按钮样式 */
         .btn-primary {
-            background: linear-gradient(90deg, #9c27b0 0%, #e91e63 100%);
+            background: linear-gradient(90deg, #00f0ff, #9d4edd);
             transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            font-family: 'Orbitron', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        /* 按钮悬停效果 */
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .btn-primary:hover::before {
+            left: 100%;
         }
         
         .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(233, 30, 99, 0.3);
+            transform: translateY(-4px);
+            box-shadow: 0 15px 30px rgba(0, 240, 255, 0.6);
         }
         
+        /* 标题浮动动画 */
         @keyframes float {
             0%, 100% {
                 transform: translateY(0);
             }
             50% {
-                transform: translateY(-20px);
-            }
-        }
-        
-        @keyframes rotate {
-            0% {
-                transform: rotate(0deg);
-            }
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-        
-        @keyframes pulse {
-            0%, 100% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.2);
+                transform: translateY(-25px);
             }
         }
         
         .floating {
-            animation: float 6s ease-in-out infinite;
+            animation: float 8s ease-in-out infinite;
         }
         
-        .cursor-particle {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: -1;
-            transform: translate(-50%, -50%);
+        /* 霓虹文字效果 */
+        .neon-text {
+            color: #ffffff;
+            text-shadow: 
+                0 0 2px #00f0ff,
+                0 0 4px #00f0ff,
+                0 0 8px #00f0ff,
+                0 0 16px #00f0ff;
+            animation: neonPulse 3s ease-in-out infinite alternate;
+            font-family: 'Orbitron', 'Noto Sans SC', sans-serif;
+            letter-spacing: 2px;
+            font-weight: 700;
+            text-transform: none;
+        }
+        
+        @keyframes neonPulse {
+            from {
+                text-shadow: 
+                    0 0 2px #00f0ff,
+                    0 0 4px #00f0ff,
+                    0 0 8px #00f0ff,
+                    0 0 16px #00f0ff;
+            }
+            to {
+                text-shadow: 
+                    0 0 3px #00f0ff,
+                    0 0 6px #00f0ff,
+                    0 0 12px #00f0ff,
+                    0 0 24px #00f0ff;
+            }
+        }
+        
+        /* 提示框样式 */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 240, 255, 0.9);
+            color: #050508;
+            padding: 15px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+            font-family: 'Orbitron', sans-serif;
+            z-index: 9999;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.8);
+            border: 1px solid rgba(0, 240, 255, 0.5);
+        }
+        
+        .toast.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        /* 淡入动画 */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* 卡片标题样式 */
+        .website-card h3 {
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 1px;
+            font-weight: 700;
+            color: #00f0ff;
+        }
+        
+        /* 卡片分类标签 */
+        .website-card span {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        /* 卡片描述 */
+        .website-card p {
+            font-family: 'Noto Sans SC', sans-serif;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        /* 页脚固定部分 */
+        .footer-fixed {
+            color: rgba(255, 255, 255, 0.6);
+            cursor: default;
+        }
+        
+        /* 页脚链接 */
+        .footer-link {
+            color: rgba(255, 255, 255, 0.6);
+            transition: color 0.3s ease;
+        }
+        
+        .footer-link:hover {
+            color: #00f0ff;
+            text-shadow: 0 0 10px #00f0ff;
         }
     </style>
 </head>
 <body>
-    <div id="particles-js"></div>
+    <!-- 版本号显示（可修改） -->
+    <div id="version-info" class="fixed top-4 left-4 text-cyan-400 text-sm font-orbitron opacity-70 z-30 transition-opacity duration-500">
+        DJ-2026.V3
+    </div>
+    
+    <!-- 动态科幻背景 -->
+    <div class="cyber-bg">
+        <div class="cyber-grid"></div>
+        <div class="cyber-glow"></div>
+        <div class="cyber-line" style="top: 20%; animation-delay: 0s;"></div>
+        <div class="cyber-line" style="top: 40%; animation-delay: 1s;"></div>
+        <div class="cyber-line" style="top: 60%; animation-delay: 2s;"></div>
+        <div class="cyber-line" style="top: 80%; animation-delay: 0.5s;"></div>
+    </div>
+    
+    <!-- 回到顶部锚点 -->
+    <div id="top"></div>
+    
+    <!-- 侧边栏按钮 -->
+    <button id="sidebar-toggle" class="fixed top-4 right-4 z-50 text-white focus:outline-none">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+    </button>
+    
+    <!-- 侧边栏 -->
+    <div id="sidebar" class="fixed top-0 right-0 w-64 h-full bg-gray-900 bg-opacity-95 backdrop-blur-lg border-l border-cyan-500/30 z-40 transform translate-x-full transition-transform 0.3s ease-in-out">
+        <div class="p-6">
+            <h2 id="category-nav-title" class="text-2xl font-bold mb-6 text-cyan-400 cursor-pointer">分类导航</h2>
+            <ul class="space-y-4">
+                <li><a href="#ai-tools" class="block text-gray-300 hover:text-cyan-400 transition-colors">AI工具</a></li>
+                <li><a href="#development-tools" class="block text-gray-300 hover:text-cyan-400 transition-colors">开发工具</a></li>
+                <li><a href="#video-resources" class="block text-gray-300 hover:text-cyan-400 transition-colors">影视资源</a></li>
+                <li><a href="#practical-tools" class="block text-gray-300 hover:text-cyan-400 transition-colors">实用工具</a></li>
+                <li><a href="#practical-resources" class="block text-gray-300 hover:text-cyan-400 transition-colors">实用资源</a></li>
+                <li><a href="#learning-resources" class="block text-gray-300 hover:text-cyan-400 transition-colors">学习资源</a></li>
+            </ul>
+        </div>
+    </div>
     
     <div class="container mx-auto px-4 py-12">
         <header class="text-center mb-16">
-            <h1 class="text-5xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600 floating">
-                ✨ 灵犀-芯启
+            <h1 class="text-5xl font-bold mb-4 floating">
+                <span class="neon-text">✨ 灵犀-芯启</span>
             </h1>
             <p class="text-xl text-gray-300 max-w-2xl mx-auto">
                 发现互联网上最令人心动的创意
@@ -108,14 +404,22 @@
         </div>
         
         <footer class="mt-16 text-center text-gray-400">
-            <p><a href="https://wjm2008.pages.dev" target="_blank">© 2025 灵犀服务器-个人主页| 让分享带来更多喜悦</a></p>
+            <p>
+                <span class="footer-fixed">© 2026 灵犀服务器 </span>
+                <a href="https://wjm2008.pages.dev" target="_blank" class="footer-link">| 个人主页- 让分享带来更多喜悦</a>
+            </p>
         </footer>
     </div>
 
     <script>
         // 网站数据数组 - 管理员可以在这里修改分享的网站
         const websites = [            
-            
+            {
+                name: "豆包AI",
+                url: "https://www.doubao.com/",
+                description: "字节跳动旗下AI智能助手",
+                category: "AI工具"
+            },
             {
                 name: "kimi ai",
                 url: "https://kimi.moonshot.cn",
@@ -126,12 +430,6 @@
                 name: "DeepSeek",
                 url: "https://chat.deepseek.com/",
                 description: "会深度思考的AI助手",
-                category: "AI工具"
-            },
-            {
-                name: "豆包AI",
-                url: "https://www.doubao.com/",
-                description: "字节跳动旗下AI智能助手",
                 category: "AI工具"
             },
             {
@@ -183,6 +481,12 @@
                 category: "开发工具"
             },
             {
+                name: "动漫共和国",
+                url: "https://www.dmghg.org",
+                description: "动漫资源平台",
+                category: "影视资源"
+            },
+            {
                 name: "荔枝网",
                 url: "https://www.gdtv.cn",
                 description: "广东网络广播电视台",
@@ -201,15 +505,27 @@
                 category: "影视资源"
             },
             {
+                name: "工具集散地",
+                url: "https://tools.liumingye.cn/",
+                description: "实用工具和资源的集合地",
+                category: "实用资源"
+            },
+            {
                 name: "MemoryStory",
                 url: "https://cnxiaobai.com",
                 description: "实用软件下载",
-                category: "软件资源"
+                category: "实用资源"
             },
             {
                 name: "书签地球",
                 url: "https://www.bookmarkearth.cn",
                 description: "中国首家书签共享平台",
+                category: "实用资源"
+            },
+            {
+                name: "pickfree",
+                url: "https://www.pickfree.cn/",
+                description: "免费资源导航",
                 category: "实用资源"
             },
             {
@@ -222,6 +538,12 @@
                 name: "菜鸟教程",
                 url: "https://www.runoob.com",
                 description: "编程学习网站",
+                category: "学习资源"
+            },
+            {
+                name: "广东省教育资源公共服务平台",
+                url: "https://gl.gds.edu.cn/",
+                description: "广东省教育资源公共服务平台",
                 category: "学习资源"
             },
             {
@@ -249,9 +571,63 @@
                 category: "学习资源"
             },
             {
-                name: "中药大全",
+                name: "易搜",
+                url: "https://yiso.fun/",
+                description: "全网资源搜索引擎，提供视频、图片、文档等多种资源的搜索和下载服务",
+                category: "实用工具"
+            },
+            {
+                name: "fogsight",
+                url: "https://fogsight.ai/",
+                description: "将复杂概念转化为直观的动态HTML动画",
+                category: "学习资源"
+            },
+            {
+                name: "Green Video",
                 url: "https://www.xjlz365.com",
-                description: "中草药查询 中药大全",
+                description: "免费视频下载站点，提供各种影视资源下载",
+                category: "实用工具"
+            },
+            {
+                name: "纸由我paperMe",
+                url: "https://paperme.toolooz.com/",
+                description: "自定义打印纸生成器",
+                category: "实用工具"
+            },
+            {
+                name: "iLovePDF",
+                url: "https://www.ilovepdf.com/zh-cn",
+                description: "PDF爱好者的在线工具",
+                category: "实用工具"
+            },
+            {
+                name: "MyLiveWallpapers",
+                url: "https://mylivewallpapers.com/",
+                description: "提供高质量动态壁纸下载的网站，涵盖了各种风格和主题的动态壁纸资源",
+                category: "实用工具"
+            },
+            {
+                name: "Removebg",
+                url: "https://www.remove.bg/zh",
+                description: "去除图片背景的在线工具，支持自动识别和删除图片背景，适用于各种图片编辑和设计需求",
+                category: "实用工具"
+            },
+            {
+                name: "Stellarium",
+                url: "https://stellarium.org/zh_CN/",
+                description: "开源的天文馆软件，可以模拟夜空中的星星、行星和星座",
+                category: "实用工具"
+            },
+            {
+                name: "SpaceMapper",
+                url: "https://spacemapper.cn/",
+                description: "提供全球卫星地图服务的网站，用户可以通过该平台查看和下载高分辨率的卫星地图，适用于地理信息系统、环境监测等领域",
+                category: "实用工具"
+            },
+            {
+                name: "实时台风信息",
+                url: "https://typhoon.slt.zj.gov.cn/",
+                description: "浙江省气象台提供的实时台风信息查询平台，提供最新的台风路径、强度、预警等信息，帮助用户及时了解台风动态",
                 category: "实用工具"
             },
             {
@@ -271,12 +647,6 @@
                 url: "https://blackace.app",
                 description: "网站秒变APP",
                 category: "实用工具"
-            },
-            {
-                name: "单词听写神器",
-                url: "http:www-wjmlhh.haisnap.com",
-                description: "单词听写工具",
-                category: "实用工具-自创工具"
             }
         ];
 
@@ -284,51 +654,102 @@
         function renderWebsites() {
             const container = document.getElementById('websites-container');
             
+            // 按分类分组
+            const categories = {
+                'AI工具': [],
+                '开发工具': [],
+                '影视资源': [],
+                '实用资源': [],
+                '学习资源': [],
+                '实用工具': []
+            };
+            
+            // 分类网站
             websites.forEach(site => {
-                const card = document.createElement('div');
-                card.className = 'website-card rounded-xl p-6 hover:bg-opacity-20';
-                
-                card.innerHTML = `
-                    <div class="flex items-center mb-4">
-                        <div class="w-12 h-12 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white text-xl mr-4">
-                            ${site.name.charAt(0)}
-                        </div>
-                        <div>
-                            <h3 class="text-xl font-bold">${site.name}</h3>
-                            <span class="text-sm text-gray-400">${site.category}</span>
-                        </div>
-                    </div>
-                    <p class="text-gray-300 mb-6">${site.description}</p>
-                    <a href="${site.url}" target="_blank" class="btn-primary text-white font-medium py-2 px-6 rounded-full inline-block">
-                        访问网站
-                    </a>
-                `;
-                
-                container.appendChild(card);
+                if (categories[site.category]) {
+                    categories[site.category].push(site);
+                }
+            });
+            
+            // 按顺序渲染分类
+            const categoryOrder = ['AI工具', '开发工具', '影视资源', '实用工具', '实用资源', '学习资源'];
+            
+            // 分类ID映射
+            const categoryIds = {
+                'AI工具': 'ai-tools',
+                '开发工具': 'development-tools',
+                '影视资源': 'video-resources',
+                '实用资源': 'practical-resources',
+                '学习资源': 'learning-resources',
+                '实用工具': 'practical-tools'
+            };
+            
+            categoryOrder.forEach((category, index) => {
+                if (categories[category].length > 0) {
+                    // 添加分类标题
+                    const categoryTitle = document.createElement('h2');
+                    categoryTitle.id = categoryIds[category];
+                    categoryTitle.className = 'text-2xl font-bold mb-6 text-cyan-400 border-b border-cyan-500/30 pb-2 col-span-full';
+                    categoryTitle.textContent = category;
+                    container.appendChild(categoryTitle);
+                    
+                    // 添加分类下的网站卡片
+                    categories[category].forEach(site => {
+                        const card = document.createElement('div');
+                        card.className = 'website-card rounded-xl p-6';
+                        
+                        card.innerHTML = `
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 rounded-full bg-gradient-to-r from-[#00f0ff] to-[#9d4edd] flex items-center justify-center text-white text-xl mr-4">
+                                    ${site.name.charAt(0)}
+                                </div>
+                                <div>
+                                    <h3 class="text-xl font-bold">${site.name}</h3>
+                                    <span class="text-sm">${site.category}</span>
+                                </div>
+                            </div>
+                            <p class="mb-6">${site.description}</p>
+                            <a href="${site.url}" target="_blank" class="btn-primary text-white font-medium py-2 px-6 rounded-full inline-block">
+                                访问网站
+                            </a>
+                        `;
+                        
+
+                        
+                        container.appendChild(card);
+                    });
+                    
+                    // 在分类结尾添加换行（除了最后一个分类）
+                    if (index < categoryOrder.length - 1) {
+                        const divider = document.createElement('div');
+                        divider.className = 'col-span-full h-8';
+                        container.appendChild(divider);
+                    }
+                }
             });
         }
 
         // 创建粒子效果
         function createParticles() {
-            const colors = ['#9c27b0', '#e91e63', '#673ab7', '#ff5722', '#ff9800'];
+            const colors = ['#00f0ff', '#9d4edd', '#050508', '#1a1a2e', '#16213e'];
             
-            // 背景粒子
+            // 背景粒子 - 固定在页面底部
             for (let i = 0; i < 100; i++) {
                 const particle = document.createElement('div');
                 particle.className = 'particle';
                 
                 const size = Math.random() * 15 + 5;
                 const posX = Math.random() * window.innerWidth;
-                const posY = Math.random() * window.innerHeight;
+                const posY = Math.random() * window.innerHeight; // 在整个页面范围内生成
                 const color = colors[Math.floor(Math.random() * colors.length)];
-                const duration = Math.random() * 5 + 5; // 修改为5-10秒
-                const delay = Math.random() * 3; // 缩短延迟时间
+                const duration = Math.random() * 5 + 5;
+                const delay = Math.random() * 3;
                 const animationType = Math.random() > 0.5 ? 'float' : 'rotate';
                 
                 particle.style.width = `${size}px`;
                 particle.style.height = `${size}px`;
                 particle.style.left = `${posX}px`;
-                particle.style.top = `${posY}px`;
+                particle.style.top = `${posY}px`; // 使用top而不是bottom
                 particle.style.backgroundColor = color;
                 particle.style.opacity = Math.random() * 0.6 + 0.2;
                 particle.style.animation = `${animationType} ${duration}s ease-in-out ${delay}s infinite`;
@@ -341,38 +762,130 @@
                 document.body.appendChild(particle);
             }
             
-            // 鼠标跟随粒子
+            // 鼠标跟随粒子 - 科幻风格（流畅版）
+            let mouseMoveTimer;
+            let lastMouseX = 0;
+            let lastMouseY = 0;
+            
             document.addEventListener('mousemove', (e) => {
-                const particle = document.createElement('div');
-                particle.className = 'cursor-particle';
+                // 计算鼠标移动速度
+                const mouseSpeed = Math.sqrt(
+                    Math.pow(e.clientX - lastMouseX, 2) + 
+                    Math.pow(e.clientY - lastMouseY, 2)
+                );
+                lastMouseX = e.clientX;
+                lastMouseY = e.clientY;
                 
-                const size = Math.random() * 10 + 5;
-                const color = colors[Math.floor(Math.random() * colors.length)];
+                // 根据鼠标速度调整粒子数量
+                const particleCount = Math.min(Math.floor(mouseSpeed / 10) + 6, 12);
                 
-                particle.style.width = `${size}px`;
-                particle.style.height = `${size}px`;
-                particle.style.left = `${e.clientX}px`;
-                particle.style.top = `${e.clientY}px`;
-                particle.style.backgroundColor = color;
-                particle.style.opacity = '0.7';
-                particle.style.animation = `pulse ${Math.random() * 1 + 0.5}s ease-in-out infinite`; // 加快脉冲速度
-                
-                document.body.appendChild(particle);
-                
-                // 粒子消失动画
-                setTimeout(() => {
-                    particle.style.transition = 'all 0.3s ease'; // 加快消失速度
-                    particle.style.opacity = '0';
-                    particle.style.transform = 'translate(-50%, -50%) scale(2)';
-                    setTimeout(() => {
-                        particle.remove();
-                    }, 300);
-                }, 500); // 缩短存在时间
+                // 减少延迟，提高灵敏度
+                clearTimeout(mouseMoveTimer);
+                mouseMoveTimer = setTimeout(() => {
+                    // 生成粒子
+                    for (let i = 0; i < particleCount; i++) {
+                        const particle = document.createElement('div');
+                        particle.className = 'particle';
+                        
+                        // 调整粒子尺寸
+                        const size = Math.random() * 4 + 1;
+                        // 颜色变化
+                        const color = colors[Math.floor(Math.random() * colors.length)];
+                        const angle = Math.random() * Math.PI * 2;
+                        // 根据鼠标速度调整粒子范围
+                        const distance = Math.random() * (mouseSpeed / 10 + 3) + 2;
+                        const xOffset = Math.cos(angle) * distance;
+                        const yOffset = Math.sin(angle) * distance;
+                        
+                        particle.style.width = `${size}px`;
+                        particle.style.height = `${size}px`;
+                        particle.style.left = `${e.clientX + xOffset}px`;
+                        particle.style.top = `${e.clientY + yOffset}px`; // 在鼠标位置周围生成
+                        particle.style.backgroundColor = color;
+                        particle.style.opacity = Math.random() * 0.4 + 0.2;
+                        particle.style.borderRadius = '50%';
+                        particle.style.boxShadow = `0 0 ${size * 3}px ${color}80`;
+                        particle.style.filter = `blur(${Math.random() * 0.4 + 0.1}px)`;
+                        
+                        // 根据鼠标速度调整动画速度
+                        const animationDuration = Math.random() * 0.6 + 0.3 + (100 / (mouseSpeed + 10));
+                        particle.style.animation = `cyberFloat ${animationDuration}s ease-out forwards`;
+                        
+                        document.body.appendChild(particle);
+                        
+                        // 粒子消失动画
+                        setTimeout(() => {
+                            particle.remove();
+                        }, animationDuration * 1000);
+                    }
+                }, 5); // 进一步减少延迟
             });
         }
 
+
+
         // 页面加载完成后初始化
         document.addEventListener('DOMContentLoaded', () => {
+            // 侧边栏功能
+            const sidebarToggle = document.getElementById('sidebar-toggle');
+            const sidebar = document.getElementById('sidebar');
+            
+            // 切换侧边栏显示/隐藏
+            sidebarToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('translate-x-full');
+            });
+            
+            // 点击分类链接时平滑滚动到对应分类
+            const categoryLinks = sidebar.querySelectorAll('a');
+            categoryLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    
+                    if (targetElement) {
+                        // 关闭侧边栏
+                        sidebar.classList.add('translate-x-full');
+                        
+                        // 平滑滚动到目标位置
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+            
+            // 点击分类导航标题回到顶部
+            const categoryNavTitle = document.getElementById('category-nav-title');
+            categoryNavTitle.addEventListener('click', function() {
+                // 关闭侧边栏
+                sidebar.classList.add('translate-x-full');
+                
+                // 平滑滚动到顶部
+                document.querySelector('#top').scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            });
+            
+            // 版本号随页面下滑而隐藏
+            const versionInfo = document.getElementById('version-info');
+            window.addEventListener('scroll', () => {
+                // 当页面滚动超过100px时，版本号开始隐藏
+                const scrollY = window.scrollY;
+                const opacity = Math.max(0, 0.7 - (scrollY / 1000));
+                versionInfo.style.opacity = opacity;
+                
+                // 当透明度为0时，完全隐藏元素
+                if (opacity === 0) {
+                    versionInfo.style.display = 'none';
+                } else {
+                    versionInfo.style.display = 'block';
+                }
+            });
+            
+            // 初始化页面
             renderWebsites();
             createParticles();
         });
