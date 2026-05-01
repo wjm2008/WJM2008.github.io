@@ -1,4 +1,3 @@
-<!-- cool_website_sharing_platform/frontend/index.html -->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -351,7 +350,7 @@
 <body>
     <!-- 版本号显示（可修改） -->
     <div id="version-info" class="fixed top-4 left-4 text-cyan-400 text-sm font-orbitron opacity-70 z-30 transition-opacity duration-500">
-        DJ-2026 .056 .V6
+        DJ-2026 .057 .V6
     </div>
     
     <!-- 动态科幻背景 -->
@@ -511,6 +510,12 @@
                 category: "实用工具"
             },
             {
+                name: "速读谷",
+                url: "https://www.sudugu.org/",
+                description: "提供免费的电子书下载服务",
+                category: "实用工具"
+            },
+            {
                 name: "MyLiveWallpapers",
                 url: "https://mylivewallpapers.com/",
                 description: "提供高质量动态壁纸下载的网站，涵盖了各种风格和主题的动态壁纸资源",
@@ -596,7 +601,7 @@
             },
             {
                 name: "Green Video",
-                url: "https://www.xjlz365.com",
+                url: "https://greenvideo.cc/",
                 description: "免费视频下载站点，提供各种影视资源下载",
                 category: "实用工具"
             },
@@ -720,8 +725,6 @@
                             </a>
                         `;
                         
-
-                        
                         container.appendChild(card);
                     });
                     
@@ -828,8 +831,6 @@
             });
         }
 
-
-
         // 页面加载完成后初始化
         document.addEventListener('DOMContentLoaded', () => {
             // 侧边栏功能
@@ -873,6 +874,20 @@
                     behavior: 'smooth',
                     block: 'start'
                 });
+            });
+            
+            // 点击非侧栏区域时关闭侧栏
+            document.addEventListener('click', function(e) {
+                // 检查侧栏是否展开（没有translate-x-full类）
+                const isSidebarOpen = !sidebar.classList.contains('translate-x-full');
+                
+                // 如果侧栏是展开状态，且点击的不是侧栏和侧栏的子元素，也不是菜单按钮
+                if (isSidebarOpen && 
+                    !sidebar.contains(e.target) && 
+                    !sidebarToggle.contains(e.target)) {
+                    // 关闭侧边栏
+                    sidebar.classList.add('translate-x-full');
+                }
             });
             
             // 版本号随页面下滑而隐藏
